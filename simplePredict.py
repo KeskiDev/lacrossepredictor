@@ -13,7 +13,7 @@ def compareNormalSituation(team_one_stat, team_two_stat):
 		#both get zero point
 		return (0,0)
 
-def compareGoalsAgainst(team_one_stat, team_two_stat):
+def compareAbnormalSituation(team_one_stat, team_two_stat):
 	if(team_one_stat < team_two_stat):
 		#team_one wins this one
 		return (1, 0)
@@ -50,7 +50,7 @@ for row in csv_f:
 goalsFor1, goalsFor2 = compareNormalSituation(float(goals_for1), float(goals_for2))
 
 #goals against
-goalsAgainst1, goalsAgainst2 = compareGoalsAgainst(float(goals_against1), float(goals_against2))
+goalsAgainst1, goalsAgainst2 = compareAbnormalSituation(float(goals_against1), float(goals_against2))
 
 #faceoff
 face_off1, face_off2 = compareNormalSituation(float(faceoff1), float(faceoff2))
@@ -70,7 +70,7 @@ save_team1, save_team2 = compareNormalSituation(float(saves1),float(saves2))
 ground1, ground2 = compareNormalSituation(float(ground_balls1), float(ground_balls2))
 
 #turnovers
-turn1, turn2 = compareNormalSituation(float(turnovers1), float(turnovers2))
+turn1, turn2 = compareAbnormalSituation(float(turnovers1), float(turnovers2))
 
 #caused turnovers
 caused1, caused2 = compareNormalSituation(float(caused_turnovers1), float(caused_turnovers2))
