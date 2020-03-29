@@ -33,11 +33,12 @@ def RandomWinner(team1, team2):
 
 
 #read the csv
-file = open('opponents4.csv')
+file = open('opponents.csv')
 csv_f = csv.reader(file)
 round = 0
 team_number = 1
 game = 1
+team_stats = []
 
 #print csv_f
 for row in csv_f:
@@ -46,65 +47,63 @@ for row in csv_f:
 		team_number = 1
 		game += 1
 
-	if(round != 1):
-		team_name_ + str(team_number) + "_" + str(game),
-		goals_for_ + str(team_number) + "_" + str(game),
-		goals_against_ + str(team_number) + "_" + str(game),
-		faceoff, man_up_ + str(team_number) + "_" + str(game),
-		man_down_ + str(team_number) + "_" + str(game),
-		scoring_margin_ + str(team_number) + "_" + str(game),
-		saves_ + str(team_number) + "_" + str(game),
-		ground_balls_ + str(team_number) + "_" + str(game),
-		turnovers_ + str(team_number) + "_" + str(game),
-		caused_turnovers_ + str(team_number) + "_" + str(game),
-		shot_percent_ + str(team_number) + "_" + str(game),
-		clearing_percent_ + str(team_number) + "_" + str(game)  = row
+	if(round != 0):
+		team_stats.append(row)
+	#if(round != 1):
+	#	team_name_ + str(team_number) + "_" + str(game), goals_for_ + str(team_number) + "_" + str(game),goals_against_ + str(team_number) + "_" + str(game),faceoff, man_up_ + str(team_number) + "_" + str(game),man_down_ + str(team_number) + "_" + str(game),scoring_margin_ + str(team_number) + "_" + str(game),saves_ + str(team_number) + "_" + str(game),ground_balls_ + str(team_number) + "_" + str(game),turnovers_ + str(team_number) + "_" + str(game),caused_turnovers_ + str(team_number) + "_" + str(game),shot_percent_ + str(team_number) + "_" + str(game),clearing_percent_ + str(team_number) + "_" + str(game)  = row
 
+	#	print team_name_str(team_number) + "_" + str(game)
 	round += 1
 	team_number += 1
+	#team_count += 1
 
-#goals for
-goalsFor1, goalsFor2 = compareNormalSituation(float(goals_for1), float(goals_for2))
-
-#goals against
-goalsAgainst1, goalsAgainst2 = compareAbnormalSituation(float(goals_against1), float(goals_against2))
-
-#faceoff
-face_off1, face_off2 = compareNormalSituation(float(faceoff1), float(faceoff2))
-
-#manup
-manup1, manup2 = compareNormalSituation(float(man_up1), float(man_up2))
-
-#mandown
-mandown1, mandown2 = compareNormalSituation(float(man_down1), float(man_down2))
-
-#scoringMaring ?
-
-#saves
-save_team1, save_team2 = compareNormalSituation(float(saves1),float(saves2))
-
-#groundBalls
-ground1, ground2 = compareNormalSituation(float(ground_balls1), float(ground_balls2))
-
-#turnovers
-turn1, turn2 = compareAbnormalSituation(float(turnovers1), float(turnovers2))
-
-#caused turnovers
-caused1, caused2 = compareNormalSituation(float(caused_turnovers1), float(caused_turnovers2))
-
-#shot percent
-shot1, shot2 = compareNormalSituation(float(shot_percent1), float(shot_percent2))
-
-#clearing
-ground1, ground2 = compareNormalSituation(float(clearing_percent1), float(clearing_percent2))
+for team in range(0, len(team_stats), 2):
+	team_name_1, goals_for_1, goals_against_1, faceoff_1, man_up_1, man_down_1, scoring_margin_1, saves_1, ground_balls_1, turnovers_1, caused_turnovers_1, shot_percent_1, clearing_percent_1  = team_stats[team]
+	team_name_2, goals_for_2, goals_against_2, faceoff_2, man_up_2, man_down_2, scoring_margin_2, saves_2, ground_balls_2, turnovers_2, caused_turnovers_2, shot_percent_2, clearing_percent_2  = team_stats[team + 1]
 
 
-team_one_count = goalsFor1 + goalsAgainst1 + face_off1 + manup1 + save_team1 + ground1 + turn1 + caused1 + shot1 + ground1
-team_two_count = goalsFor2 + goalsAgainst2 + face_off2 + manup1 + save_team2 + ground2 + turn2 + caused2 + shot2 + ground2
+	#goals for
+	goalsFor1, goalsFor2 = compareNormalSituation(float(goals_for_1), float(goals_for_2))
 
-if(team_one_count > team_two_count):
-	print "%s should win the game" % (team1_name)
-elif(team_one_count < team_two_count):
-	print "%s should win the game" % (team2_name)
-else:
-	RandomWinner(team1_name, team2_name)
+	#goals against
+	goalsAgainst1, goalsAgainst2 = compareAbnormalSituation(float(goals_against_1), float(goals_against_2))
+
+	#faceoff
+	face_off1, face_off2 = compareNormalSituation(float(faceoff_1), float(faceoff_2))
+
+	#manup
+	manup1, manup2 = compareNormalSituation(float(man_up_1), float(man_up_2))
+
+	#mandown
+	mandown1, mandown2 = compareNormalSituation(float(man_down_1), float(man_down_2))
+
+	#scoringMaring ?
+
+	#saves
+	save_team1, save_team2 = compareNormalSituation(float(saves_1),float(saves_2))
+
+	#groundBalls
+	ground1, ground2 = compareNormalSituation(float(ground_balls_1), float(ground_balls_2))
+
+	#turnovers
+	turn1, turn2 = compareAbnormalSituation(float(turnovers_1), float(turnovers_2))
+
+	#caused turnovers
+	caused1, caused2 = compareNormalSituation(float(caused_turnovers_1), float(caused_turnovers_2))
+
+	#shot percent
+	shot1, shot2 = compareNormalSituation(float(shot_percent_1), float(shot_percent_2))
+
+	#clearing
+	ground1, ground2 = compareNormalSituation(float(clearing_percent_1), float(clearing_percent_2))
+
+
+	team_one_count = goalsFor1 + goalsAgainst1 + face_off1 + manup1 + save_team1 + ground1 + turn1 + caused1 + shot1 + ground1
+	team_two_count = goalsFor2 + goalsAgainst2 + face_off2 + manup1 + save_team2 + ground2 + turn2 + caused2 + shot2 + ground2
+
+	if(team_one_count > team_two_count):
+		print "%s should win the game" % (team_name_1)
+	elif(team_one_count < team_two_count):
+		print "%s should win the game" % (team_name_2)
+	else:
+		RandomWinner(team_name_1, team_name_2)
