@@ -33,18 +33,35 @@ def RandomWinner(team1, team2):
 
 
 #read the csv
-file = open('opponents.csv')
+file = open('opponents4.csv')
 csv_f = csv.reader(file)
 round = 0
+team_number = 1
+game = 1
 
 #print csv_f
 for row in csv_f:
 #	print row
-	if(round == 1):
-		team1_name, goals_for1, goals_against1, faceoff1, man_up1, man_down1, scoring_margin1, saves1, ground_balls1, turnovers1, caused_turnovers1, shot_percent1, clearing_percent1  = row
-	elif(round == 2):
-		team2_name, goals_for2, goals_against2, faceoff2, man_up2, man_down2, scoring_margin2, saves2, ground_balls2, turnovers2, caused_turnovers2, shot_percent2, clearing_percent2 = row
+	if team_number == 2:
+		team_number = 1
+		game += 1
+
+	if(round != 1):
+		team_name_ + str(team_number) + "_" + str(game),
+		goals_for_ + str(team_number) + "_" + str(game),
+		goals_against_ + str(team_number) + "_" + str(game),
+		faceoff, man_up_ + str(team_number) + "_" + str(game),
+		man_down_ + str(team_number) + "_" + str(game),
+		scoring_margin_ + str(team_number) + "_" + str(game),
+		saves_ + str(team_number) + "_" + str(game),
+		ground_balls_ + str(team_number) + "_" + str(game),
+		turnovers_ + str(team_number) + "_" + str(game),
+		caused_turnovers_ + str(team_number) + "_" + str(game),
+		shot_percent_ + str(team_number) + "_" + str(game),
+		clearing_percent_ + str(team_number) + "_" + str(game)  = row
+
 	round += 1
+	team_number += 1
 
 #goals for
 goalsFor1, goalsFor2 = compareNormalSituation(float(goals_for1), float(goals_for2))
