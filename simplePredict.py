@@ -44,8 +44,10 @@ def DecideWinner(team1_score, team2_score, team1_name, team2_name):
 	else:
 		chosenWinner = RandomWinner(team1_name, team2_name)
 
+	return chosenWinner
+
 #read the csv
-file = open('opponents.csv')
+file = open('2018.csv')
 csv_f = csv.reader(file)
 round = 0
 team_number = 1
@@ -62,7 +64,7 @@ for row in csv_f:
 
 	if(round != 0):
 		team_stats.append(row)
-	
+
 	round += 1
 	team_number += 1
 
@@ -108,11 +110,16 @@ for team in range(0, len(team_stats), 2):
 
 	team_one_count = goalsFor1 + goalsAgainst1 + face_off1 + manup1 + save_team1 + ground1 + turn1 + caused1 + shot1 + ground1
 	team_two_count = goalsFor2 + goalsAgainst2 + face_off2 + manup1 + save_team2 + ground2 + turn2 + caused2 + shot2 + ground2
-	
+
 	winner = DecideWinner(team_one_count, team_two_count, team_name_1, team_name_2)
-	if winner == actual_winner_1:
-		correct_guess += 1
 
-correctPercent = correct_guess/len(team_stats)
+	if winner == int(actual_winner_1):
+		correct_guesses += 1
 
-print correctPercent
+game_count = float(len(team_stats)/2)
+correctPercent = (correct_guesses/game_count) * 100
+percent = "%"
+
+print len(team_stats)
+print correct_guesses
+print "%s%s correct guesses." % (correctPercent, percent)
