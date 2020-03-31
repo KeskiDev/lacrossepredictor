@@ -3,10 +3,12 @@ import pandas
 from random import *
 
 def compareNormalSituation(team_one_stat, team_two_stat):
-	if(team_one_stat > team_two_stat):
+	if(not team_one_stat  or not team_two_stat):
+		return (0,0)
+	elif(float(team_one_stat) > float(team_two_stat)):
 		#team_one wins this one
 		return (1, 0)
-	elif(team_two_stat > team_one_stat):
+	elif(float(team_two_stat) > float(team_one_stat)):
 		#team_two wins this one
 		return (0,1)
 	else:
@@ -14,10 +16,12 @@ def compareNormalSituation(team_one_stat, team_two_stat):
 		return (0,0)
 
 def compareAbnormalSituation(team_one_stat, team_two_stat):
-	if(team_one_stat < team_two_stat):
+	if(team_one_stat == " " or team_two_stat == " "):
+		return (0,0)
+	elif(float(team_one_stat) < float(team_two_stat)):
 		#team_one wins this one
 		return (1, 0)
-	elif(team_two_stat < team_one_stat):
+	elif(float(team_two_stat) < float(team_one_stat)):
 		#team_two wins this one
 		return (0,1)
 	else:
@@ -73,39 +77,39 @@ for team in range(0, len(team_stats), 2):
 	team_name_2, goals_for_2, goals_against_2, faceoff_2, man_up_2, man_down_2, scoring_margin_2, saves_2, ground_balls_2, turnovers_2, caused_turnovers_2, shot_percent_2, clearing_percent_2, actual_winner_2  = team_stats[team + 1]
 
 	#goals for
-	goalsFor1, goalsFor2 = compareNormalSituation(float(goals_for_1), float(goals_for_2))
+	goalsFor1, goalsFor2 = compareNormalSituation(goals_for_1, goals_for_2)
 
 	#goals against
-	goalsAgainst1, goalsAgainst2 = compareAbnormalSituation(float(goals_against_1), float(goals_against_2))
+	goalsAgainst1, goalsAgainst2 = compareAbnormalSituation(goals_against_1,goals_against_2)
 
 	#faceoff
-	face_off1, face_off2 = compareNormalSituation(float(faceoff_1), float(faceoff_2))
+	face_off1, face_off2 = compareNormalSituation(faceoff_1, faceoff_2)
 
 	#manup
-	manup1, manup2 = compareNormalSituation(float(man_up_1), float(man_up_2))
+	manup1, manup2 = compareNormalSituation(man_up_1, man_up_2)
 
 	#mandown
-	mandown1, mandown2 = compareNormalSituation(float(man_down_1), float(man_down_2))
+	mandown1, mandown2 = compareNormalSituation(man_down_1, man_down_2)
 
 	#scoringMaring ?
 
 	#saves
-	save_team1, save_team2 = compareNormalSituation(float(saves_1),float(saves_2))
+	save_team1, save_team2 = compareNormalSituation(saves_1,saves_2)
 
 	#groundBalls
-	ground1, ground2 = compareNormalSituation(float(ground_balls_1), float(ground_balls_2))
+	ground1, ground2 = compareNormalSituation(ground_balls_1, ground_balls_2)
 
 	#turnovers
-	turn1, turn2 = compareAbnormalSituation(float(turnovers_1), float(turnovers_2))
+	turn1, turn2 = compareAbnormalSituation(turnovers_1, turnovers_2)
 
 	#caused turnovers
-	caused1, caused2 = compareNormalSituation(float(caused_turnovers_1), float(caused_turnovers_2))
+	caused1, caused2 = compareNormalSituation(caused_turnovers_1, caused_turnovers_2)
 
 	#shot percent
-	shot1, shot2 = compareNormalSituation(float(shot_percent_1), float(shot_percent_2))
+	shot1, shot2 = compareNormalSituation(shot_percent_1, shot_percent_2)
 
 	#clearing
-	ground1, ground2 = compareNormalSituation(float(clearing_percent_1), float(clearing_percent_2))
+	ground1, ground2 = compareNormalSituation(clearing_percent_1, clearing_percent_2)
 
 
 	team_one_count = goalsFor1 + goalsAgainst1 + face_off1 + manup1 + save_team1 + ground1 + turn1 + caused1 + shot1 + ground1
@@ -120,6 +124,4 @@ game_count = float(len(team_stats)/2)
 correctPercent = (correct_guesses/game_count) * 100
 percent = "%"
 
-print len(team_stats)
-print correct_guesses
 print "%s%s correct guesses." % (correctPercent, percent)
