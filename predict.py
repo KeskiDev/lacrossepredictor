@@ -6,8 +6,49 @@ from sklearn.cluster import KMeans
 from sklearn.neighbors import NearestNeighbors
 import csv
 
-def GetGameData(team1_stats, team2_stats):
+def GetGameData(team1_stats, team2_stats, stat_count):
     #combine both team stats into one.
+    gameInfo = []
+    #goals for
+	goalsFor = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(goalsFor)
+	#goals against
+	goalsAgainst = AbnormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(goalsAginst)
+	#faceoff
+	face_off = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(face_off)
+	#manup
+	manup = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(manup)
+	#mandown
+	mandown = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(mandown)
+	#saves
+	saves = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(saves)
+	#groundBalls
+	groundBalls = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(groundBalls)
+	#turnovers
+	turnOvers = AbnormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(turnOvers)
+	#caused turnovers
+	causedTurnovers = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(causedTurnovers)
+	#shot percent
+	shotPercent = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(shotPercent)
+	#clearing
+	clearingPercent = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(clearingPercent)
+    #score
+    finalScore = NormalSituation(team1_stats[], team2_stats[])
+    gameInfo.append(finalScore)
+
+    return gameInfo
+
+
 
 def NormalSituation(stat1, stat2):
 	#higher stat wins
@@ -17,8 +58,13 @@ def NormalSituation(stat1, stat2):
 
 
 def AbnormalSituation(stat1, stat2):
-	#lower stat wins
-    #so not a simple minus will work?
+    statScore = 0
+    if stat1 > stat2:
+        statScore = stat2 - stat1
+    else:
+        statScore = stat1 - stat2
+
+    return statScore
 
 
 #predict the winner using machine learning
@@ -49,3 +95,6 @@ for team in range(0, len(team_stats),2):
 
     gameInfo = GetGameData(team1, team2)
     game_stats.append(gameInfo)
+
+
+print game_stats[1]
