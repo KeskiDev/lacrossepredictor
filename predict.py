@@ -6,11 +6,11 @@ def GetGameData(team1_stats, team2_stats):
     #combine both team stats into one.
     gameInfo = []
 
-    print team1_stats[0]
-    print team2_stats[0]
     #goals for
-    # goalsFor = NormalSituation(team1_stats[1], team2_stats[1])
-    # gameInfo.append(goalsFor)
+    goalsFor = NormalSituation(team1_stats[1], team2_stats[1])
+    gameInfo.append(goalsFor)
+    print(team1_stats[2])
+    print(team2_stats[2])
     # #goals against
     # goalsAgainst = AbnormalSituation(team1_stats[2], team2_stats[2])
     # gameInfo.append(goalsAgainst)
