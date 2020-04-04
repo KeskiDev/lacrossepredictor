@@ -1,4 +1,5 @@
 import pandas as pd
+import math
 import csv
 
 def GetGameData(team1_stats, team2_stats):
@@ -70,7 +71,7 @@ def AbnormalSituation(stat1, stat2):
             statScore = float(stat2) - float(stat1)
         else:
             statScore = float(stat1) - float(stat2)
-
+    
     return round(statScore,2)
 
 
