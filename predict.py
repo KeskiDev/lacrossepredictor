@@ -9,7 +9,7 @@ def GetGameData(team1_stats, team2_stats):
     gameInfo.append(goalsFor)
     #goals against
     goalsAgainst = AbnormalSituation(team1_stats[2], team2_stats[2])
-    gameInfo.append(goalsAginst)
+    gameInfo.append(goalsAgainst)
     #faceoff
     face_off = NormalSituation(team1_stats[3], team2_stats[3])
     gameInfo.append(face_off)
