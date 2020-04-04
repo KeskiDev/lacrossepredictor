@@ -53,13 +53,17 @@ def GetGameData(team1_stats, team2_stats):
 
 def NormalSituation(stat1, stat2):
 	#higher stat wins
-    if(stat1 is None or stat2 is None):
+    if(stat1 is None or stat1 == "" or stat2 is None or stat2 == ""):
         return 0
-    return float(stat1) - float(stat2)
+
+    stat = float(stat1) - float(stat2)
+    result = round(stat,2)
+
+    return result
 
 def AbnormalSituation(stat1, stat2):
     statScore = 0
-    if(stat1 is None or stat2 is None):
+    if(stat1 is None or stat1 == "" or stat2 is None or stat2 == ""):
         return statScore
     else:
         if float(stat1) > float(stat2):
@@ -67,7 +71,7 @@ def AbnormalSituation(stat1, stat2):
         else:
             statScore = float(stat1) - float(stat2)
 
-    return statScore
+    return round(statScore,2)
 
 
 #predict the winner using machine learning
