@@ -12,35 +12,35 @@ def GetGameData(team1_stats, team2_stats, stat_count):
     #goals for
     goalsFor = NormalSituation(team1_stats[1], team2_stats[1])
     gameInfo.append(goalsFor)
-	#goals against
+    #goals against
     goalsAgainst = AbnormalSituation(team1_stats[2], team2_stats[2])
     gameInfo.append(goalsAginst)
-	#faceoff
+    #faceoff
     face_off = NormalSituation(team1_stats[3], team2_stats[3])
     gameInfo.append(face_off)
     #manup
-	manup = NormalSituation(team1_stats[4], team2_stats[4])
+    manup = NormalSituation(team1_stats[4], team2_stats[4])
     gameInfo.append(manup)
-	#mandown
-	mandown = NormalSituation(team1_stats[5], team2_stats[5])
+    #mandown
+    mandown = NormalSituation(team1_stats[5], team2_stats[5])
     gameInfo.append(mandown)
-	#saves
-	saves = NormalSituation(team1_stats[6], team2_stats[6])
+    #saves
+    saves = NormalSituation(team1_stats[6], team2_stats[6])
     gameInfo.append(saves)
-	#groundBalls
-	groundBalls = NormalSituation(team1_stats[7], team2_stats[7])
+    #groundBalls
+    groundBalls = NormalSituation(team1_stats[7], team2_stats[7])
     gameInfo.append(groundBalls)
-	#turnovers
-	turnOvers = AbnormalSituation(team1_stats[8], team2_stats[8])
+    #turnovers
+    turnOvers = AbnormalSituation(team1_stats[8], team2_stats[8])
     gameInfo.append(turnOvers)
-	#caused turnovers
-	causedTurnovers = NormalSituation(team1_stats[9], team2_stats[9])
+    #caused turnovers
+    causedTurnovers = NormalSituation(team1_stats[9], team2_stats[9])
     gameInfo.append(causedTurnovers)
-	#shot percent
-	shotPercent = NormalSituation(team1_stats[10], team2_stats[10])
+    #shot percent
+    shotPercent = NormalSituation(team1_stats[10], team2_stats[10])
     gameInfo.append(shotPercent)
-	#clearing
-	clearingPercent = NormalSituation(team1_stats[11], team2_stats[11])
+    #clearing
+    clearingPercent = NormalSituation(team1_stats[11], team2_stats[11])
     gameInfo.append(clearingPercent)
     #score
     finalScore = NormalSituation(team1_stats[12], team2_stats[12])
