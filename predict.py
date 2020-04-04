@@ -58,9 +58,7 @@ def NormalSituation(stat1, stat2):
         return 0
 
     stat = float(stat1) - float(stat2)
-    result = round(stat,2)
-
-    return result
+    return round(stat,2)
 
 def AbnormalSituation(stat1, stat2):
     statScore = 0
