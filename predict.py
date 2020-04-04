@@ -7,7 +7,9 @@ def GetGameData(team1_stats, team2_stats):
     gameInfo = []
 
     #goals for
-    goalsFor = NormalSituation(team1_stats[1], team2_stats[1])
+    goalsfor1 = team1_stats[1]
+    goalsfor2 = team2_stats[1]
+    goalsFor = NormalSituation(goalsfor1, goalsfor2)
     gameInfo.append(goalsFor)
     print(team1_stats[2])
     print(team2_stats[2])
