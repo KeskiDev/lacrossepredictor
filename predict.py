@@ -51,7 +51,7 @@ def GetGameData(team1_stats, team2_stats, stat_count):
 def NormalSituation(stat1, stat2):
 	#higher stat wins
     if(stat1 is None or stat2 is None):
-        retrun 0
+        return 0
     return float(stat1) - float(stat2)
 
 def AbnormalSituation(stat1, stat2):
