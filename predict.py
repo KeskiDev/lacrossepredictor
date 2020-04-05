@@ -63,7 +63,8 @@ def NormalSituation(stat1, stat2):
         return 0
 
     stat = float(stat1) - float(stat2)
-    return round(stat,2)
+    roundedNumber = round(stat,2)
+    return roundedNumber
 
 def AbnormalSituation(stat1, stat2):
     statScore = 0
@@ -75,7 +76,8 @@ def AbnormalSituation(stat1, stat2):
         else:
             statScore = float(stat1) - float(stat2)
     
-    return round(statScore,2)
+    roundedNumber = round(statScore,2)
+    return roundedNumber
 
 
 #predict the winner using machine learning
