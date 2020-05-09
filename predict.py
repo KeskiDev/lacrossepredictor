@@ -75,19 +75,18 @@ def createModels(labels, trainingData):
     X = []
     Y = []
     svc = SVC(kernel = 'linear')
-    lr = LogisticRegression()
-    rf = RandomForestClassifier()
+    #r = LogisticRegression()
+    #rf = RandomForestClassifier()
     
     Y = labels
     X = trainingData
-    X = np.array(X)
+    X = np.array(X).reshape(-1,1) 
 
+    #lr.fit(X, Y)
+    #joblib.dump(lr, 'lrTraining.pkl')
 
-    lr.fit(X, Y)
-    joblib.dump(lr, 'lrTraining.pkl')
-
-    rf.fit(X, Y)
-    joblib.dump(rf, 'rfTraining.pkl')
+    #rf.fit(X, Y)
+    #joblib.dump(rf, 'rfTraining.pkl')
     
     svc.fit(X, Y)
     joblib.dump(svc, 'svcTraining.pkl')
