@@ -91,7 +91,7 @@ def createModels(labels, trainingData):
     svc.fit(X, Y)
     joblib.dump(svc, 'svcTraining.pkl')
 
-def predictWinner(data, labels, team1_name, team2_name):
+#def predictWinner(data, labels, team1_name, team2_name):
     #open pickle file
     #prediict winner
 
