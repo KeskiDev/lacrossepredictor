@@ -3,6 +3,7 @@ import numpy as np
 import math
 import csv
 from sklearn.externals import joblib
+from sklearn.svm import SVC
 
 def GetGameData(team1_stats, team2_stats):
     #combine both team stats into one.
@@ -73,7 +74,7 @@ def AbnormalSituation(stat1, stat2):
 def createModels(labels, trainingData):
     X = []
     Y = []
-    svc = SVC(kernal = 'linear')
+    svc = SVC(kernel = 'linear')
     lr = LogisticRegression()
     rf = RandomForestClassifier()
     
