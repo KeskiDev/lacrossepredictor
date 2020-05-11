@@ -5,6 +5,46 @@ import csv
 from sklearn.externals import joblib
 from sklearn.svm import SVC
 
+def PredictingGameData(team1_stats, team2_stats):
+    #combine both team stats into one.
+    gameInfo = []
+
+    #goals for
+    goalsFor = NormalSituation(team1_stats[0], team2_stats[0])
+    gameInfo.append(goalsFor)
+    #goals against
+    goalsAgainst = AbnormalSituation(team1_stats[1], team2_stats[1])
+    gameInfo.append(goalsAgainst)
+    #faceoff
+    face_off = NormalSituation(team1_stats[2], team2_stats[2])
+    gameInfo.append(face_off)
+    #manup
+    manup = NormalSituation(team1_stats[3], team2_stats[3])
+    gameInfo.append(manup)
+    #mandown
+    mandown = NormalSituation(team1_stats[4], team2_stats[4])
+    gameInfo.append(mandown)
+    #saves
+    saves = NormalSituation(team1_stats[5], team2_stats[5])
+    gameInfo.append(saves)
+    #groundBalls
+    groundBalls = NormalSituation(team1_stats[6], team2_stats[6])
+    gameInfo.append(groundBalls)
+    #turnovers
+    turnOvers = AbnormalSituation(team1_stats[7], team2_stats[7])
+    gameInfo.append(turnOvers)
+    #caused turnovers
+    causedTurnovers = NormalSituation(team1_stats[8], team2_stats[8])
+    gameInfo.append(causedTurnovers)
+    #shot percent
+    shotPercent = NormalSituation(team1_stats[9], team2_stats[9])
+    gameInfo.append(shotPercent)
+    #clearing
+    clearingPercent = NormalSituation(team1_stats[10], team2_stats[10])
+    gameInfo.append(clearingPercent)
+    
+    return gameInfo
+
 def GetGameData(team1_stats, team2_stats):
     #combine both team stats into one.
     gameInfo = []
@@ -70,7 +110,6 @@ def AbnormalSituation(stat1, stat2):
     
     return statScore
 
-
 def createModels(labels, trainingData):
     X = []
     Y = []
@@ -94,10 +133,13 @@ def createModels(labels, trainingData):
 def predictWinner(data, team1_name, team2_name):
     winner = ""
     #open pickle file
-    gi = pd.read_pickle('svcTraining.pkl')
-    gi.head();
+    #gi = pd.read_pickle('svcTraining.pkl')
+    #gi.head();
+    gi = joblib.load('svcTraining.pkl')
+    game = np.array(data).reshape(-1,1)
+
     #prediict winner
-    prediction = gi.predict(data)
+    prediction = gi.predict(game)[0]
 
     if(prediction == 1):
         winner = team1_name
@@ -108,7 +150,7 @@ def predictWinner(data, team1_name, team2_name):
 
 
 #predict the winner using machine learning
-data = open('2019Test.csv')
+data = open('2019.csv')
 csv_data = csv.reader(data)
 
 row = 0
@@ -117,6 +159,7 @@ game_stats = []
 team_number = 1
 correct_guess = 0
 
+gamePlayed = 1
 
 for round in csv_data:
     if team_number == 2:
@@ -130,19 +173,22 @@ for round in csv_data:
 for team in range(0, len(team_stats),2):
     #print team_stats[team]
     #print team_stats[team+1]
-    team_name_1, goals_for_1, goals_against_1, faceoff_1, man_up_1, man_down_1, saves_1, ground_balls_1, turnovers_1, caused_turnovers_1, shot_percent_1, clearing_percent_1, team1_score = team_stats[team]
-    team_name_2, goals_for_2, goals_against_2, faceoff_2, man_up_2, man_down_2, saves_2, ground_balls_2, turnovers_2, caused_turnovers_2, shot_percent_2, clearing_percent_2, team2_score = team_stats[team + 1]
-    team1 = [goals_for_1, goals_against_1, faceoff_1, man_up_1, man_down_1, saves_1, ground_balls_1, turnovers_1, caused_turnovers_1, shot_percent_1, clearing_percent_1, team1_score, actual_winner_1]
-    team2 = [goals_for_2, goals_against_2, faceoff_2, man_up_2, man_down_2, saves_2, ground_balls_2, turnovers_2, caused_turnovers_2, shot_percent_2, clearing_percent_2, team2_score, actual_winner_2]
-    
-    gameInfo = GetGameData(team1, team2)
-    labels = ["goals for", "goals against",	"faceoff winning %", "man-up off", "man down def", "saves per game", "ground balls per game",	"turnovers per game", "caused turnovers", "shot %",	"clearing %", "score", "actual winner"]
+    #training - add the missing variables
+    #team_name_2, goals_for_2, goals_against_2, faceoff_2, man_up_2, man_down_2, saves_2, ground_balls_2, turnovers_2, caused_turnovers_2, shot_percent_2, clearing_percent_2 = team_stats[team + 1]
+    #team1 = [goals_for_1, goals_against_1, faceoff_1, man_up_1, man_down_1, saves_1, ground_balls_1, turnovers_1, caused_turnovers_1, shot_percent_1, clearing_percent_1, team1_score]
+    #team2 = [goals_for_2, goals_against_2, faceoff_2, man_up_2, man_down_2, saves_2, ground_balls_2, turnovers_2, caused_turnovers_2, shot_percent_2, clearing_percent_2, team2_score]
+    #gameInfo = GetGameData(team1, team2)
+    #labels = ["goals for", "goals against",	"faceoff winning %", "man-up off", "man down def", "saves per game", "ground balls per game", "turnovers per game", "caused turnovers", "shot %",	"clearing %", "score", "actual winner"]
 
+    #predicting
+    team_name_1, goals_for_1, goals_against_1, faceoff_1, man_up_1, man_down_1, saves_1, ground_balls_1, turnovers_1, caused_turnovers_1, shot_percent_1, clearing_percent_1 = team_stats[team]
+    team_name_2, goals_for_2, goals_against_2, faceoff_2, man_up_2, man_down_2, saves_2, ground_balls_2, turnovers_2, caused_turnovers_2, shot_percent_2, clearing_percent_2 = team_stats[team + 1]
+    team1 = [goals_for_1, goals_against_1, faceoff_1, man_up_1, man_down_1, saves_1, ground_balls_1, turnovers_1, caused_turnovers_1, shot_percent_1, clearing_percent_1]
+    team2 = [goals_for_2, goals_against_2, faceoff_2, man_up_2, man_down_2, saves_2, ground_balls_2, turnovers_2, caused_turnovers_2, shot_percent_2, clearing_percent_2]
+    
+    predictInfo = PredictingGameData(team1, team2)
+    
     #createModels(labels, gameInfo)
 
-    print predictWinner(gameInfo, team_name_1, team_name_2)
-    
-    #print gameInfo
-    #game_stats.append(gameInfo)
-
-
+    print str(gamePlayed) + " - " + predictWinner(predictInfo, team_name_1, team_name_2)
+    gamePlayed += 1
