@@ -1,5 +1,5 @@
 import csv
-import pandas
+import pandas as pd
 from random import *
 import os
 
@@ -134,58 +134,63 @@ def PrintWinner(team1Points, team1Name, team2Points, team2Name, team1_home, team
         score = "{} ({}) vs {} ({})".format(team1Name, team1Points,team2Name, team2Points)
         print(score)
     else:
-        if(team1_home == 1):
-            print("close game but {} has home field, I call the game for them.".format(team1Name))
-        else:
-            print("close game but {} has home field, I call the game for them.".format(team2Name))
+        print("close game but {} has home field, I call the game for them.".format(team1Name))
 
 
 def Run():
     #read the file for the game(s)
-    file = open("gameday2.csv")
+    statsFile = open("stats.csv")
+    file = open("gameday.csv")
+    stats_csv = csv.reader(statsFile)
     csv_f = csv.reader(file)
-    team_stats = []
-    team_number = 1
+    games = []
+    stats = []
     line = 0
     game = 1
+    stats_line = 0
+    home_field_advantage = 1
 
+    for row in stats_csv:
+        if(stats_line > 0):
+            stats.append(row)
+        stats_line += 1
+    
+    stats_df = pd.DataFrame(stats, columns=['name', 'goals for', 'goals against', 'faceoff %', 'man up', 'man down', 'saves','ground balls','turnovers','caused turnovers','shot %','clearing %'])
+    
+
+    #then read from the stats file
     for row in csv_f:
-        if team_number == 2:
-            team_number = 1
-            game += 1
-
-        if(line != 0):
-            team_stats.append(row)
+        games.append(row)
 
         line += 1
-        team_number += 1
-    
-    #call the methods
-    for team in range(0, len(team_stats), 2):
-        team_name_1, goals_for_1, goals_against_1, faceoff_1, man_up_1, man_down_1, saves_1, ground_balls_1, turnovers_1, caused_turnovers_1, shot_1, clearing_percent_1, home_1 = team_stats[team]
-        team_name_2, goals_for_2, goals_against_2, faceoff_2, man_up_2, man_down_2, saves_2, ground_balls_2, turnovers_2, caused_turnovers_2, shot_2, clearing_percent_2, home_2 = team_stats[team+1]
 
-        goalsFor1, goalsFor2 = GoalsFor(goals_for_1, goals_for_2)
-        goalsAgainst1, goalsAgainst2 = GoalsAgainst(goals_against_1, goals_against_2)
-        faceoff1, faceoff2 = FaceOff(faceoff_1, faceoff_2)
-        manup1, manup2 = ManUp(man_up_1, man_up_2)
-        mandown1, mandown2 = ManDown(man_down_1, man_down_2)
-        saves1, saves2 = Saves(saves_1, saves_2)
-        ground1, ground2 = Groundballs(ground_balls_1, ground_balls_2)
-        turnover1, turnover2 = Turnovers(turnovers_1, turnovers_2)
-        caused1, caused2 = CausedTurnovers(caused_turnovers_1, caused_turnovers_2)
-        shot1, shot2 = ShotPercent(shot_1, shot_2)
-        clearing1, clearing2 = Clearing(clearing_percent_1, clearing_percent_2)
 
-        team1Points = goalsFor1 + goalsAgainst1 + faceoff1 + manup1 + mandown1 + saves1 + ground1 + turnover1 + caused1 + shot1 + clearing1 + home_1
-        team2Points = goalsFor2 + goalsAgainst2 + faceoff2 + manup2 + mandown2 + saves2 + ground2 + turnover2 + caused2 + shot2 + clearing2 + home_2
+    for game in games:
+        home_team_name, away_team_name = game
+        
+        #get home team stats
+        home_team = stats_df.loc[stats_df['name'] == home_team_name].to_numpy()
+        #get away team stats
+        away_team = stats_df.loc[stats_df['name'] == away_team_name].to_numpy()
+
+        #tally the points
+        goalsFor1, goalsFor2 = GoalsFor(home_team[0][1], away_team[0][1])
+        goalsAgainst1, goalsAgainst2 = GoalsAgainst(home_team[0][2], away_team[0][2])
+        faceoff1, faceoff2 = FaceOff(home_team[0][3], away_team[0][3])
+        manup1, manup2 = ManUp(home_team[0][4], away_team[0][4])
+        mandown1, mandown2 = ManDown(home_team[0][5], away_team[0][5])
+        saves1, saves2 = Saves(home_team[0][6], away_team[0][6])
+        ground1, ground2 = Groundballs(home_team[0][7], away_team[0][7])
+        turnover1, turnover2 = Turnovers(home_team[0][8], away_team[0][8])
+        caused1, caused2 = CausedTurnovers(home_team[0][9], away_team[0][9])
+        shot1, shot2 = ShotPercent(home_team[0][10], away_team[0][10])
+        clearing1, clearing2 = Clearing(home_team[0][11], away_team[0][11])
+
+        team1Points = goalsFor1 + goalsAgainst1 + faceoff1 + manup1 + mandown1 + saves1 + ground1 + turnover1 + caused1 + shot1 + clearing1 + home_field_advantage
+        team2Points = goalsFor2 + goalsAgainst2 + faceoff2 + manup2 + mandown2 + saves2 + ground2 + turnover2 + caused2 + shot2 + clearing2
 
         #print winner
-        PrintWinner(team1Points, team_name_1, team2Points, team_name_2, home_1, home_2)
+        PrintWinner(team1Points, home_team_name, team2Points, away_team_name, 1,0)
 
 
 Run()
-
-# cwd = os.getcwd()  # Get the current working directory (cwd)
-# files = os.listdir(cwd)  # Get all the files in that directory
-# print("Files in %r: %s" % (cwd, files))
