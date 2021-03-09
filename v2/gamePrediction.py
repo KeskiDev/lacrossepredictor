@@ -123,6 +123,25 @@ def Clearing(team1, team2):
     else:
         return(0,0)
 
+def WeeklyRank(team1, team2):
+    team_1_rank = 0
+    team_2_rank = 0
+
+    if(float(team1) != 0):
+        team_1_rank = float(team1)
+
+    if(float(team2) != 0):
+        team_2_rank = float(team2)
+
+    if(team_1_rank == team_2_rank):
+        return(0,0)
+    elif(team_1_rank < team_2_rank):
+        return(.5,0)
+    elif(team_2_rank < team_1_rank):
+        return(0,.5)
+
+
+
 def PrintWinner(team1Points, team1Name, team2Points, team2Name, team1_home, team2_home):
     #which team has the most points
     if(team1Points > team2Points):
@@ -131,7 +150,6 @@ def PrintWinner(team1Points, team1Name, team2Points, team2Name, team1_home, team
         print("{}({}) should win the game against {}({}).\n".format(team2Name, team2Points, team1Name, team1Points))
     else:
         print("close game but {} has home field, I call the game for them.\n".format(team1Name))
-
 
 def Run():
     #read the file for the game(s)
@@ -151,7 +169,7 @@ def Run():
             stats.append(row)
         stats_line += 1
     
-    stats_df = pd.DataFrame(stats, columns=['name', 'goals for', 'goals against', 'faceoff %', 'man up', 'man down', 'saves','ground balls','turnovers','caused turnovers','shot %','clearing %'])
+    stats_df = pd.DataFrame(stats, columns=['name', 'goals for', 'goals against', 'faceoff %', 'man up', 'man down', 'saves','ground balls','turnovers','caused turnovers','shot %','clearing %','rank'])
     
 
     #then read from the stats file
@@ -183,9 +201,10 @@ def Run():
             caused1, caused2 = CausedTurnovers(home_team[0][9], away_team[0][9])
             shot1, shot2 = ShotPercent(home_team[0][10], away_team[0][10])
             clearing1, clearing2 = Clearing(home_team[0][11], away_team[0][11])
+            rank1,rank2 = WeeklyRank(home_team[0][12], away_team[0][12])
 
-            team1Points = goalsFor1 + goalsAgainst1 + faceoff1 + manup1 + mandown1 + saves1 + ground1 + turnover1 + caused1 + shot1 + clearing1 + home_field_advantage
-            team2Points = goalsFor2 + goalsAgainst2 + faceoff2 + manup2 + mandown2 + saves2 + ground2 + turnover2 + caused2 + shot2 + clearing2
+            team1Points = goalsFor1 + goalsAgainst1 + faceoff1 + manup1 + mandown1 + saves1 + ground1 + turnover1 + caused1 + shot1 + clearing1 + home_field_advantage + rank1
+            team2Points = goalsFor2 + goalsAgainst2 + faceoff2 + manup2 + mandown2 + saves2 + ground2 + turnover2 + caused2 + shot2 + clearing2 + rank2
 
             #print winner
             PrintWinner(team1Points, home_team_name, team2Points, away_team_name, 1,0)

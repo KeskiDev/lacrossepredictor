@@ -17,8 +17,9 @@ def url_get_contents(url):
         print(contents)
 
 
-def get_stats(team_name, school,year):
+def get_stats(team_name, school,year,weeklyRank):
     url = "https://www.insidelacrosse.com/team/stats/{}/{}".format(team_name, year)
+    
     xhtml = url_get_contents(url).decode('utf-8')
     p = HTMLTableParser()
 
@@ -40,6 +41,10 @@ def get_stats(team_name, school,year):
     df['shots faced'] = df['shots faced'].apply(pd.to_numeric, downcast='float', errors='coerce')
     df['faceoff won'] = df['faceoff won'].apply(pd.to_numeric, downcast='float', errors='coerce')
     df['faceoff attempt'] = df['faceoff attempt'].apply(pd.to_numeric, downcast='float', errors='coerce')
+
+
+    #get the team ranking?
+    #how long a team has been in D1?
     
     gamesPlayed = df['GamesPlayed'].max()
     
@@ -77,12 +82,12 @@ def get_stats(team_name, school,year):
 
         #team name, goals for, goals against, faceoff %, man up, man down, saves per game, gb per game, to per game, caused to, shot %, clearing %
         #team_data = "{},{},{},{},{},{},{},{},{},{},{},{}".format(school, goals, goalsAllowed, faceOffPercent, manup, mandown, savesPerGame, gbPerGame,toPerGame,causedTO, shotPercent,clearing)
-        team_data = [school, goals, goalsAllowed, faceOffPercent, manup, mandown, savesPerGame, gbPerGame,toPerGame,causedTO, shotPercent,clearing]
+        team_data = [school, goals, goalsAllowed, faceOffPercent, manup, mandown, savesPerGame, gbPerGame,toPerGame,causedTO, shotPercent,clearing,weeklyRank]
         
         return team_data
     else:
         #team has played no games this year
-        team_data = [school,0,0,0,0,0,0,0,0,0,0,0]
+        team_data = [school,0,0,0,0,0,0,0,0,0,0,0,weeklyRank]
         return team_data
     #newDF = pd.DataFrame(team_data)
 
@@ -97,15 +102,59 @@ def get_stats(team_name, school,year):
     # filename = "{}.csv".format(school)
 
     
+def GetRanking(year):
+    url = "https://www.insidelacrosse.com/league/di/polls/{}".format(year)
+    
+    xhtml = url_get_contents(url).decode('utf-8')
+    p = HTMLTableParser()
+
+    p.feed(xhtml)
+    #each for is for 1 row
+    #can't do in for loop function recursion most likely
+    count = 0
+    how_many_things = len(p.tables[1][0])
+
+    team_rankings = []
+
+
+    while count < how_many_things:
+        rank,teamName, new_count = GetTeamRankings(p.tables[1][0], count)
+        team_rank_info = {"team": teamName, "rank": rank}
+        team_rankings.append(team_rank_info)
+        if(rank == '20'):
+            break
+        count = new_count
+        
+    
+    return team_rankings
+
+def GetTeamRankings(data, position):
+    rank = 0
+    teamName = ""
+    next_position = 0
+
+    if(data[position] == ''):
+        position += 1
+
+    if(position +1 < len(data)):
+        rank = data[position]
+
+        name_and_record = data[position +1]
+        #trim the record off of the team name
+        team_split = name_and_record.split('(')
+        teamName = team_split[0].strip()
+
+        #??????
+        next_position = (position + 4) if (position + 4) < len(data) else len(data) 
+        if((position + 4) <= len(data)):
+            if(data[position + 4] == ' '):
+                next_position = position + 6 if (position + 6) < len(data) else len(data)
+
+    return rank,teamName, next_position
 
 
 
 def Run():
-    #read the file with all the teams in it and get the needed team abbreviation for the web page
-    #read
-    #pandas.read_csv(os.path.join(location, "test.csv"))
-
-
     #read the file for the game(s)
     file = open("teams.csv")
     csv_f = csv.reader(file)
@@ -114,6 +163,9 @@ def Run():
     line = 0
     year = '2021'
     stats = []
+
+    #get the current weekly rankings
+    ranking = GetRanking(year)
 
     for row in csv_f:
         if(line != 0):
@@ -124,13 +176,17 @@ def Run():
 
     for team in range(0,len(teams)):
         school, team_name = teams[team]
-        #print("{} - {}".format(team_name, nick_name))
+        
+        weeklyRank = 0
+        for schoolRank in ranking:
+            if(schoolRank["team"] == school):
+                weeklyRank = schoolRank["rank"]
 
-        teamstats = get_stats(team_name, school, year)
+        teamstats = get_stats(team_name, school, year, weeklyRank)
         stats.append(teamstats)
 
     #team name, goals for, goals against, faceoff %, man up, man down, saves per game, gb per game, to per game, caused to, shot %, clearing %
-    fields = ['name','goals','goals against','faceoff%','man up','man down','aves per game','gb per game','to per game','caused to','shot %','clearing %']
+    fields = ['name','goals','goals against','faceoff%','man up','man down','aves per game','gb per game','to per game','caused to','shot %','clearing %','rank']
     with open('stats.csv', 'w') as statsFile:
         csvWriter = csv.writer(statsFile)
         csvWriter.writerow(fields)
